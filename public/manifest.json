@@ -1,0 +1,11 @@
+{
+  "name": "My Recipes",
+  "short_name": "Recipes",
+  "description": "Personal recipe collection",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#f97316",
+  "orientation": "portrait",
+  "icons": []
+}
