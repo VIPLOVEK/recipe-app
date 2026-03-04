@@ -1,15 +1,11 @@
 import RecipeForm from '@/components/RecipeForm'
 import { notFound } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 
 async function getRecipe(id: string) {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    const res = await fetch(`${baseUrl}/api/recipes/${id}`, { cache: 'no-store' })
-    if (!res.ok) return null
-    return res.json()
-  } catch {
-    return null
-  }
+  const { data, error } = await supabase.from('recipes').select('*').eq('id', id).single()
+  if (error || !data) return null
+  return data
 }
 
 export default async function EditRecipePage({ params }: { params: Promise<{ id: string }> }) {
