@@ -3,6 +3,7 @@ import Link from 'next/link'
 import DeleteButton from './DeleteButton'
 import RefetchButton from './RefetchButton'
 import { supabase, proxyImage } from '@/lib/supabase'
+import RecipeStepsPlayer from '@/components/RecipeStepsPlayer'
 
 async function getRecipe(id: string) {
   const { data, error } = await supabase.from('recipes').select('*').eq('id', id).single()
@@ -16,7 +17,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
   if (!recipe) notFound()
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto pb-28">
       {/* Back */}
       <Link
         href="/"
@@ -130,32 +131,9 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
         </section>
       )}
 
-      {/* Steps */}
+      {/* Steps — with audio player */}
       {recipe.steps?.length > 0 && (
-        <section className="mb-5">
-          <h2 className="font-display font-semibold text-lg mb-3" style={{ color: 'var(--text-primary)' }}>
-            Instructions
-          </h2>
-          <div className="space-y-3">
-            {recipe.steps.map((step: string, i: number) => (
-              <div
-                key={i}
-                className="flex gap-4 p-5 rounded-2xl"
-                style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}
-              >
-                <div
-                  className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold"
-                  style={{ background: 'linear-gradient(135deg, #C8490A, #F97316)', color: '#fff' }}
-                >
-                  {i + 1}
-                </div>
-                <p className="text-sm leading-relaxed pt-1" style={{ color: 'var(--text-primary)' }}>
-                  {step}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <RecipeStepsPlayer steps={recipe.steps} title={recipe.title} />
       )}
 
       {/* Notes */}
