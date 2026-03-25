@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import type { WeekPlan } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,7 +30,7 @@ export async function PUT(request: NextRequest) {
   const { week_start, plan } = body as { week_start: string; plan: WeekPlan }
   if (!week_start) return NextResponse.json({ error: 'week_start required' }, { status: 400 })
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('meal_plans')
     .upsert(
       { week_start, plan, updated_at: new Date().toISOString() },
